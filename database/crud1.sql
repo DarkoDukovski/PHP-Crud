@@ -28,6 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `news` (
+  `id` int(11) NOT NULL,
   `title` text NOT NULL,
   `description` text NOT NULL,
   `image` text NOT NULL,
@@ -69,11 +70,17 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `create_datetime`) VALUES
-(29, 'admin', 'admin@gmail.com', '482c811da5d5b4bc6d497ffa98491e38', '2024-03-11 20:12:20');
+(1, 'admin', 'admin@gmail.com', '482c811da5d5b4bc6d497ffa98491e38', '2024-03-11 20:12:20');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `news`
+--
+ALTER TABLE `news`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `students`
@@ -92,6 +99,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `news`
+--
+ALTER TABLE `news`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+--
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
@@ -101,7 +114,7 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

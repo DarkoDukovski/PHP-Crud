@@ -2,6 +2,7 @@
 session_start();
 include 'dbcon.php';
 if (isset($_POST['update_news'])) {
+    $id = mysqli_real_escape_string($con, $_POST['id']);
     $title = mysqli_real_escape_string($con, $_POST['title']);
     $description = mysqli_real_escape_string($con, $_POST['description']);
     $status = mysqli_real_escape_string($con, $_POST['status']);
@@ -26,9 +27,9 @@ if (isset($_POST['update_news'])) {
         if (empty($errors)) {
             $didUpload = move_uploaded_file($fileTmpName, $uploadPath);
         }
-        $query = "UPDATE news SET title='$title', description='$description', status='$status', image='$fileName' WHERE title='$title' ";
+        $query = "UPDATE news SET title='$title', description='$description', status='$status', image='$fileName' WHERE id='$id' ";
     } else {
-        $query = "UPDATE news SET title='$title', description='$description', status='$status' WHERE title='$title' ";
+        $query = "UPDATE news SET title='$title', description='$description', status='$status' WHERE id='$id' ";
     }
     $query_run = mysqli_query($con, $query);
     if ($query_run) {
@@ -69,14 +70,15 @@ if (isset($_POST['update_news'])) {
                     </div>
                     <div class="card-body">
                         <?php
-                        if (isset($_GET['title'])) {
-                            $title = mysqli_real_escape_string($con, $_GET['title']);
-                            $query = "SELECT * FROM news WHERE title='$title' ";
+                        if (isset($_GET['id'])) {
+                            $id = mysqli_real_escape_string($con, $_GET['id']);
+                            $query = "SELECT * FROM news WHERE id='$id' ";
                             $query_run = mysqli_query($con, $query);
                             if ($query_run && mysqli_num_rows($query_run) > 0) {
                                 $row = mysqli_fetch_assoc($query_run);
                                 ?>
                                 <form action="" method="POST" enctype="multipart/form-data">
+                                    <input type="hidden" name="id" value="<?= $row['id']; ?>">
                                     <div class="mb-3">
                                         <label for="title">Title</label>
                                         <input type="text" id="title" name="title" value="<?= $row['title']; ?>"

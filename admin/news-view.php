@@ -34,9 +34,9 @@ require 'dbcon.php';
                     <div class="card-body">
 
                         <?php
-                        if (isset($_GET['title'])) {
-                            $title = mysqli_real_escape_string($con, $_GET['title']);
-                            $query = "SELECT * FROM news WHERE title='$title' ";
+                        if (isset($_GET['id'])) {
+                            $id = mysqli_real_escape_string($con, $_GET['id']);
+                            $query = "SELECT * FROM news WHERE id='$id' ";
                             $query_run = mysqli_query($con, $query);
 
                             if (mysqli_num_rows($query_run) > 0) {

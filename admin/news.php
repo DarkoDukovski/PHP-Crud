@@ -3,17 +3,17 @@ require 'dbcon.php';
 include("auth_session.php");
 
 if (isset($_POST['delete-news'])) {
-    $title = mysqli_real_escape_string($con, $_POST['delete-news']);
+    $id = mysqli_real_escape_string($con, $_POST['delete-news']);
 
     // Retrieve the filename of the picture associated with the news
-    $query_select_image = "SELECT image FROM news WHERE title = '$title'";
+    $query_select_image = "SELECT image FROM news WHERE id = '$id'";
     $result_select_image = mysqli_query($con, $query_select_image);
     if ($result_select_image && mysqli_num_rows($result_select_image) > 0) {
         $row = mysqli_fetch_assoc($result_select_image);
         $image_filename = $row['image'];
 
         // Delete the news record from the database
-        $query_delete_news = "DELETE FROM news WHERE title = '$title'";
+        $query_delete_news = "DELETE FROM news WHERE id = '$id'";
         $query_run = mysqli_query($con, $query_delete_news);
 
         if ($query_run) {
@@ -101,16 +101,16 @@ if (isset($_POST['delete-news'])) {
                                                     <?php endif; ?>
                                                 </td>
                                                 <td>
-                                                    <a href="news-view.php?title=<?= $row['title']; ?>"
+                                                    <a href="news-view.php?id=<?= $row['id']; ?>"
                                                         class="btn btn-info btn-sm mb-1">
                                                         <i class="bi bi-eye"></i>
                                                     </a>
-                                                    <a href="news-edit.php?title=<?= $row['title']; ?>"
+                                                    <a href="news-edit.php?id=<?= $row['id']; ?>"
                                                         class="btn btn-success btn-sm mb-1">
                                                         <i class="bi bi-pencil"></i>
                                                     </a>
                                                     <form action="" method="POST" class="d-inline">
-                                                        <input type="hidden" name="delete-news" value="<?= $row['title']; ?>">
+                                                        <input type="hidden" name="delete-news" value="<?= $row['id']; ?>">
                                                         <button type="submit" class="btn btn-danger btn-sm mb-1">
                                                             <i class="bi bi-trash"></i>
                                                         </button>

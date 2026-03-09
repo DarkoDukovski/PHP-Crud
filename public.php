@@ -48,7 +48,7 @@
     require 'admin/dbcon.php';
 
     // Retrieve only active news from the 'news' table
-    $sql = "SELECT title, image, description FROM news WHERE status = 1";
+    $sql = "SELECT id, title, image, description FROM news WHERE status = 1";
     $result = $con->query($sql);
     ?>
 
@@ -59,10 +59,10 @@
         if ($result->num_rows > 0) {
           // Display cards for active news
           while ($row = $result->fetch_assoc()) {
-            // Encode title to use in URL safely
-            $urlTitle = urlencode($row['title']);
+            // Encode ID to use in URL safely
+            $newsId = urlencode($row['id']);
             echo '<div class="col-md-4 col-sm-6">';
-            echo '<a href="public-news-view.php?title=' . $urlTitle . '" style="text-decoration: none; color: inherit; display: block; height: 100%;">';
+            echo '<a href="public-news-view.php?id=' . $newsId . '" style="text-decoration: none; color: inherit; display: block; height: 100%;">';
             echo '<div class="news-card" style="border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.06);height:100%;background:#fff;transition:all 0.3s ease; cursor: pointer;">';
             echo '<img src="admin/img/' . $row['image'] . '" class="card-img-top" alt="' . htmlspecialchars($row['title']) . '" style="height:200px;width:100%;object-fit:cover;">';
             echo '<div class="card-body" style="padding:1.25rem;">';

@@ -1,9 +1,9 @@
 <?php
 require 'admin/dbcon.php';
 
-if (isset($_GET['title'])) {
-    $title_param = mysqli_real_escape_string($con, $_GET['title']);
-    $sql = "SELECT * FROM news WHERE title='$title_param' AND status = 1";
+if (isset($_GET['id'])) {
+    $id_param = mysqli_real_escape_string($con, $_GET['id']);
+    $sql = "SELECT * FROM news WHERE id='$id_param' AND status = 1";
     $result = mysqli_query($con, $sql);
 
     if (mysqli_num_rows($result) > 0) {
