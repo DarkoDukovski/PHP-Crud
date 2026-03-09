@@ -1,132 +1,132 @@
+<?php
+session_start();
+require('dbcon.php');
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$username = $_SESSION['username'];
+$showMessage = false;
+$messageType = '';
+$messageText = '';
+
+$query = "SELECT * FROM users WHERE username='$username'";
+$result = mysqli_query($con, $query) or die(mysqli_error($con));
+
+if ($result) {
+    $userData = mysqli_fetch_assoc($result);
+}
+
+if (isset($_POST['update'])) {
+    $newUsername = mysqli_real_escape_string($con, $_POST['new_username']);
+    $newEmail = mysqli_real_escape_string($con, $_POST['new_email']);
+    $newPassword = mysqli_real_escape_string($con, $_POST['new_password']);
+
+    $updateQuery = "UPDATE users SET username='$newUsername', email='$newEmail', password='" . md5($newPassword) . "' WHERE username='$username'";
+    $updateResult = mysqli_query($con, $updateQuery);
+
+    if ($updateResult) {
+        $_SESSION['username'] = $newUsername;
+        $showMessage = true;
+        $messageType = 'success';
+        $messageText = 'Profile updated successfully! Your changes have been saved.';
+    } else {
+        $showMessage = true;
+        $messageType = 'error';
+        $messageText = 'Error updating profile. Please try again.';
+    }
+}
+?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
     <meta charset="utf-8">
-    <title>Dashboard - Client area</title>
-    <link rel="stylesheet" href="css/style.css" />
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Update Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
-
-
-
-
 
 <body>
 
-<?php include("header.php"); ?>
-<style>   .body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background-color: #f4f4f4;
-}
+    <?php include("header.php"); ?>
 
-/* .form styles */
-.form {
-    max-width: 400px;
-    margin: 50px auto; /* Adjust the top margin to create space */
-    background: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+    <?php if ($showMessage): ?>
+        <?php if ($messageType == 'success'): ?>
+            <div class='container mt-5'>
+                <div class='row justify-content-center'>
+                    <div class='col-md-6'>
+                        <div class='card'>
+                            <div class='card-body text-center py-5'>
+                                <i class='bi bi-check-circle' style='font-size: 3rem; color: #10b981;'></i>
+                                <h4 class='mt-3'>Profile updated successfully!</h4>
+                                <p class='text-muted'>Your changes have been saved.</p>
+                                <a href='dashboard.php' class='btn btn-primary mt-2'>Back to Dashboard</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php else: ?>
+            <div class='container mt-5'>
+                <div class='row justify-content-center'>
+                    <div class='col-md-6'>
+                        <div class='card'>
+                            <div class='card-body text-center py-5'>
+                                <i class='bi bi-x-circle' style='font-size: 3rem; color: #ef4444;'></i>
+                                <h4 class='mt-3'>Error updating profile</h4>
+                                <p class='text-muted'>Please try again.</p>
+                                <a href='updateprofile.php' class='btn btn-primary mt-2'>Try Again</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+    <?php else: ?>
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4><i class="bi bi-person-gear me-2"></i>Update Profile</h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" name="update_profile">
+                                <div class="mb-3">
+                                    <label for="new_username">New Username</label>
+                                    <input type="text" id="new_username" name="new_username" class="form-control"
+                                        value="<?php echo isset($userData['username']) ? htmlspecialchars($userData['username']) : ''; ?>"
+                                        required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="new_email">New Email Address</label>
+                                    <input type="email" id="new_email" name="new_email" class="form-control"
+                                        value="<?php echo isset($userData['email']) ? htmlspecialchars($userData['email']) : ''; ?>"
+                                        required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="new_password">New Password</label>
+                                    <input type="password" id="new_password" name="new_password" class="form-control"
+                                        placeholder="Enter new password" required>
+                                </div>
+                                <button type="submit" name="update" class="btn btn-primary w-100">
+                                    <i class="bi bi-check-lg me-1"></i> Update Profile
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
 
-.form h1 {
-    text-align: center;
-}
-
-.form label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.form input[type="text"],
-.form input[type="password"] {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
-    border-radius: 3px;
-    border: 1px solid #ccc;
-}
-
-.form input[type="submit"] {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 3px;
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
-}
-
-.form input[type="submit"]:hover {
-    background-color: #0056b3;
-    
-    
-}
-
-.form .link {
-    text-align: center;
-    
-    
-}
-</style>
-    <?php
-    require('db.php');
-    session_start();
-
-    // Check if the user is logged in
-    if (isset($_SESSION['username'])) {
-        $username = $_SESSION['username'];
-
-        // Fetch user details from the database
-        $query = "SELECT * FROM users WHERE username='$username'";
-        $result = mysqli_query($con, $query) or die(mysql_error());
-
-        if ($result) {
-            $userData = mysqli_fetch_assoc($result);
-        }
-
-        // When the update form is submitted
-        if (isset($_POST['update'])) {
-            $newUsername = mysqli_real_escape_string($con, $_POST['new_username']);
-            $newPassword = mysqli_real_escape_string($con, $_POST['new_password']);
-
-            // Update user details in the database
-            $updateQuery = "UPDATE users SET username='$newUsername', password='" . md5($newPassword) . "' WHERE username='$username'";
-            $updateResult = mysqli_query($con, $updateQuery);
-
-            if ($updateResult) {
-                // Update the session variable with the new username
-                $_SESSION['username'] = $newUsername;
-                echo "<div class='form'>
-                    <h1>Profile updated successfully.</h1><br/>
-                    <p class='link'>Back to <a href='dashboard.php'>Dashboard</a>.</p>
-                    </div>";
-            } else {
-                echo "<div class='form'>
-                    <h1>Error updating profile. Please try again.</h1><br/>
-                    <p class='link'>Back to <a href='dashboard.php'>Dashboard</a>.</p>
-                    </div>";
-            }
-        } else {
-    ?>
-        <form class="form" method="post" name="update_profile">
-            <h1>Update Profile</h1>
-            <label>New username:</label>
-            <input type="text" name="new_username" value="<?php echo $userData['username']; ?>" required/>
-            <label>New password:</label>
-            <input type="password" name="new_password" placeholder="New Password" required/>
-            <input type="submit" value="Update" name="update" />
-        </form>
-    <?php
-        }
-    } else {
-        // Redirect to the login page if the user is not logged in
-        header("Location: login.php");
-    }
-    ?>
-    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
