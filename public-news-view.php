@@ -123,7 +123,7 @@ if (isset($_GET['id'])) {
         style="background-color: #1e293b; color: #94a3b8; text-align: center; padding: 1.5rem 1rem; font-size: 0.85rem; font-family: Inter, sans-serif;">
         <div class="container">
             <p class="mb-0">&copy;
-                <?= date('Y'); ?> PHP-CRUD Admin Panel. All rights reserved.
+                <?= date('Y'); ?> PHP-CRUD News. All rights reserved.
             </p>
         </div>
     </footer>
