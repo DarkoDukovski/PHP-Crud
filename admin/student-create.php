@@ -22,7 +22,6 @@ require 'dbcon.php';
     <div class="container mt-5">
 
         <?php
-        include('message.php');
         $formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : [];
         if (isset($_SESSION['form_data']))
             unset($_SESSION['form_data']);
@@ -30,6 +29,7 @@ require 'dbcon.php';
 
         <div class="row justify-content-center">
             <div class="col-md-8">
+                <?php include('message.php'); ?>
                 <div class="card form-card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4><i class="bi bi-person-plus me-2 text-primary"></i> Add Student</h4>

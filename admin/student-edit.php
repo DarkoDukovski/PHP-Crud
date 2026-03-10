@@ -21,10 +21,9 @@ require 'dbcon.php';
     <?php include("header.php"); ?>
     <div class="container mt-5">
 
-        <?php include('message.php'); ?>
-
         <div class="row justify-content-center">
             <div class="col-md-8">
+                <?php include('message.php'); ?>
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4>Edit Student</h4>
