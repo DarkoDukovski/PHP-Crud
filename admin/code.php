@@ -43,6 +43,14 @@ if (isset($_POST['update_student'])) {
     $date_of_birth = mysqli_real_escape_string($con, $_POST['date_of_birth']);
     if (isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
 
+        $old_image_query = "SELECT image FROM students WHERE id='$student_id'";
+        $old_image_result = mysqli_query($con, $old_image_query);
+        $old_image = "";
+        if ($old_image_result && mysqli_num_rows($old_image_result) > 0) {
+            $row_old = mysqli_fetch_assoc($old_image_result);
+            $old_image = $row_old['image'];
+        }
+
         $currentDirectory = getcwd();
         $uploadDirectory = "/img/";
 
@@ -80,6 +88,12 @@ if (isset($_POST['update_student'])) {
     $query_run = mysqli_query($con, $query);
 
     if ($query_run) {
+        if (isset($didUpload) && $didUpload && !empty($old_image)) {
+            $old_image_path = "img/" . $old_image;
+            if (file_exists($old_image_path) && is_file($old_image_path)) {
+                unlink($old_image_path);
+            }
+        }
         $_SESSION['message'] = "Student updated.";
         header("Location:students.php");
         exit(0);

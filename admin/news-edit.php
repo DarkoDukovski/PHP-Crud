@@ -7,6 +7,14 @@ if (isset($_POST['update_news'])) {
     $description = mysqli_real_escape_string($con, $_POST['description']);
     $status = mysqli_real_escape_string($con, $_POST['status']);
     if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+        $old_image_query = "SELECT image FROM news WHERE id='$id'";
+        $old_image_result = mysqli_query($con, $old_image_query);
+        $old_image = "";
+        if ($old_image_result && mysqli_num_rows($old_image_result) > 0) {
+            $row_old = mysqli_fetch_assoc($old_image_result);
+            $old_image = $row_old['image'];
+        }
+
         $currentDirectory = getcwd();
         $uploadDirectory = "/img/";
         $errors = [];
@@ -33,6 +41,12 @@ if (isset($_POST['update_news'])) {
     }
     $query_run = mysqli_query($con, $query);
     if ($query_run) {
+        if (isset($didUpload) && $didUpload && !empty($old_image)) {
+            $old_image_path = "img/" . $old_image;
+            if (file_exists($old_image_path) && is_file($old_image_path)) {
+                unlink($old_image_path);
+            }
+        }
         $_SESSION['message'] = "News updated.";
         header("Location: news.php");
         exit(0);
