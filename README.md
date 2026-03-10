@@ -51,7 +51,7 @@ I specifically developed this project using **XAMPP** on Windows, so that's the 
    * To access the admin area, go to `http://localhost/PHP-Crud/admin/login.php`.
    * **Default Admin Login**: Since you imported `crud1.sql`, an admin user is already created for you:
      * **Username**: `admin`
-     * **Password**: `test123`
+     * **Password**: `password123`
 
 *(Note: If you need to change database credentials later on, you can find them in `admin/dbcon.php` - by default XAMPP uses user `root` with no password.)*
 
